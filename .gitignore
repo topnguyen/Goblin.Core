@@ -1,0 +1,52 @@
+##################################
+# IDEA Rider
+##################################
+.idea
+.idea.*
+_ReSharper*/
+
+##################################
+# Build/Log
+##################################
+
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+[Pp]ublish/
+[Bb]uild/
+[Ll]ogs/
+!*[Ll]og/
+
+##################################
+# File Extension
+##################################
+
+*.user
+*.sln.docstates
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.bak
+*.cache
+*.ilk
+*.log
+*.sbr
+*.DotSettings
+*.rar
+*.zip
+*.7z
+*.sln
+*.md
+*.vs
+*.vscode
+
+##################################
+# Folder
+##################################
+node_modules/
+packages/

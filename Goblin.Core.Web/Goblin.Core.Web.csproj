@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Information -->
+    <PropertyGroup>
+        <!-- Author -->
+        <Authors>Top Nguyen</Authors>
+        <Copyright>http://topnguyen.com</Copyright>
+
+        <!-- Language and Framework -->
+        <LangVersion>latest</LangVersion>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+
+        <!-- Output -->
+        <OutputPath>.\bin\</OutputPath>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <RootNamespace>Goblin.Core.Web</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Elect -->
+        <PackageReference Include="Elect.Web.Middlewares" Version="3.1.0" />
+        <PackageReference Include="Elect.Web.HealthCheck" Version="3.1.0" />
+        <PackageReference Include="Elect.Web.Swagger" Version="3.1.0" />
+
+        <!-- Goblin -->
+        <ProjectReference Include="..\Goblin.Core\Goblin.Core.csproj" />
+    </ItemGroup>
+</Project>
