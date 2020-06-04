@@ -40,8 +40,6 @@ _ReSharper*/
 *.rar
 *.zip
 *.7z
-*.sln
-*.md
 *.vs
 *.vscode
 
