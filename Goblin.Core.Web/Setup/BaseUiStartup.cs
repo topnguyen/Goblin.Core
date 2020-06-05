@@ -14,11 +14,17 @@ namespace Goblin.Core.Web.Setup
             AfterConfigureMvc = mvcCoreBuilder =>
             {
                 // MVC View
-                mvcCoreBuilder.AddViews(options => { options.HtmlHelperOptions.ClientValidationEnabled = true; });
+                mvcCoreBuilder.AddViews(options =>
+                {
+                    options.HtmlHelperOptions.ClientValidationEnabled = true;
+                });
 
                 mvcCoreBuilder.AddRazorViewEngine();
 
                 mvcCoreBuilder.AddCacheTagHelper();
+                
+                mvcCoreBuilder.AddRazorRuntimeCompilation();
+
             };
         }
     }
