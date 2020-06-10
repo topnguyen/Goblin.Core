@@ -21,6 +21,7 @@ using FluentValidation.AspNetCore;
 using Goblin.Core.Web.Binders;
 using Goblin.Core.Web.Filters.Exception;
 using Goblin.Core.Web.Filters.Validation;
+using Goblin.Core.Web.JsonConverters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -108,20 +109,6 @@ namespace Goblin.Core.Web.Setup
 
             // MVC
 
-            // Action Context Accessor
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-
-            // Model Binder
-            services.AddDateTimeOffsetBinder();
-            services.AddDateTimeBinder();
-            services.AddTimeSpanBinder();
-            services.AddDecimalBinder();
-            services.AddDoubleBinder();
-
-            // Filters
-            services.AddScoped<GoblinApiValidationActionFilterAttribute>();
-            services.AddScoped<GoblinApiExceptionFilterAttribute>();
-
             // MVC Core
             var mvcCoreBuilder = services.AddMvcCore(options => { options.EnableEndpointRouting = false; });
 
@@ -133,13 +120,27 @@ namespace Goblin.Core.Web.Setup
             mvcCoreBuilder.AddApiExplorer(); // API Doc - Swagger Needed
 
             mvcCoreBuilder.AddFormatterMappings();
+            
+            // Action Context Accessor
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
+            // Model Binder
+            services.AddDateTimeOffsetBinder();
+            services.AddDateTimeBinder();
+            services.AddTimeSpanBinder();
+
+            // Filters
+            services.AddScoped<GoblinApiValidationActionFilterAttribute>();
+            services.AddScoped<GoblinApiExceptionFilterAttribute>();
 
             // MVC Json Config
             mvcCoreBuilder.AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-                options.JsonSerializerOptions.Converters.Add(
-                    new System.Text.Json.Serialization.JsonStringEnumConverter());
+                options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+                options.JsonSerializerOptions.Converters.Add(new DateTimeOffsetJsonConverter());
+                options.JsonSerializerOptions.Converters.Add(new DateTimeJsonConverter());
+                options.JsonSerializerOptions.Converters.Add(new TimeSpanJsonConverter());
             });
 
             // Fluent Validation
