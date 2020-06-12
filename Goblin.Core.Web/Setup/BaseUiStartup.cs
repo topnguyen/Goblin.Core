@@ -1,5 +1,4 @@
-﻿using Elect.Core.EnvUtils;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,18 +11,21 @@ namespace Goblin.Core.Web.Setup
     {
         protected BaseUiStartup(IWebHostEnvironment env, IConfiguration configuration) : base(env, configuration)
         {
-            AfterConfigureMvc = mvcCoreBuilder =>
+            BeforeConfigureMvc = mvcCoreBuilder =>
             {
-
                 // MVC View
                 mvcCoreBuilder.AddViews(options =>
                 {
                     options.HtmlHelperOptions.ClientValidationEnabled = true;
                 });
-
+                
+                mvcCoreBuilder.AddRazorViewEngine();
+                
                 mvcCoreBuilder.AddCacheTagHelper();
-
+                
+                #if DEBUG
                 mvcCoreBuilder.AddRazorRuntimeCompilation();
+                #endif
             };
         }
     }
