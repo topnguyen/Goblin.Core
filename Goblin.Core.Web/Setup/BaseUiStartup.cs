@@ -23,12 +23,7 @@ namespace Goblin.Core.Web.Setup
 
                 mvcCoreBuilder.AddCacheTagHelper();
 
-                mvcCoreBuilder.AddRazorViewEngine();
-                
-                if (EnvHelper.IsDevelopment())
-                {
-                    mvcCoreBuilder.AddRazorRuntimeCompilation();
-                }
+                mvcCoreBuilder.AddRazorRuntimeCompilation();
             };
         }
     }
