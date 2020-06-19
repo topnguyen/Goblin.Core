@@ -21,7 +21,7 @@
         <PackageReference Include="Elect.DI" Version="3.1.1" />
         <PackageReference Include="Elect.Mapper.AutoMapper" Version="3.1.1" />
         <PackageReference Include="Elect.Logger" Version="3.1.1" />
-        <PackageReference Include="Elect.Data.IO" Version="3.1.1" />
+        <PackageReference Include="Elect.Data.IO" Version="3.1.2" />
         <PackageReference Include="Elect.Job.Hangfire" Version="3.1.1" />
         <PackageReference Include="Elect.Web" Version="3.1.1" />
 
