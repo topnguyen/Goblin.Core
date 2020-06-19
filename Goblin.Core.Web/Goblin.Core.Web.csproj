@@ -17,12 +17,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Toolbelt.Blazor.HeadElement.ServerPrerendering" Version="1.2.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.5" />
 
         <!-- Elect -->
         <PackageReference Include="Elect.Web.Middlewares" Version="3.1.2" />
         <PackageReference Include="Elect.Web.HealthCheck" Version="3.1.1" />
         <PackageReference Include="Elect.Web.Swagger" Version="3.1.2" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.5" />
 
         <!-- Goblin -->
         <ProjectReference Include="..\Goblin.Core\Goblin.Core.csproj" />

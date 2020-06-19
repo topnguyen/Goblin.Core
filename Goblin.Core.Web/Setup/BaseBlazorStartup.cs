@@ -1,35 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO.Compression;
-using System.Text.Json;
 using Elect.Core.ConfigUtils;
 using Elect.DI;
-using Elect.Job.Hangfire;
-using Elect.Job.Hangfire.Models;
 using Elect.Logger.Logging;
 using Elect.Logger.Logging.Models;
 using Elect.Mapper.AutoMapper;
-using Elect.Web.HealthCheck;
-using Elect.Web.HealthCheck.Models;
-using Elect.Web.Middlewares.CorsMiddleware;
 using Elect.Web.Middlewares.HttpContextMiddleware;
 using Elect.Web.Middlewares.MeasureProcessingTimeMiddleware;
 using Elect.Web.Middlewares.ServerInfoMiddleware;
-using Elect.Web.Swagger;
-using Elect.Web.Swagger.Models;
-using FluentValidation.AspNetCore;
-using Goblin.Core.Web.Binders;
-using Goblin.Core.Web.Filters.Exception;
-using Goblin.Core.Web.Filters.Validation;
-using Goblin.Core.Web.JsonConverters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 namespace Goblin.Core.Web.Setup
 {
@@ -87,6 +73,7 @@ namespace Goblin.Core.Web.Setup
             services.AddElectServerInfo();
 
             // Blazor
+            services.AddHeadElementHelper();
             
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -123,6 +110,8 @@ namespace Goblin.Core.Web.Setup
             // Call Back
             BeforeConfigureApp?.Invoke(app, env, lifetime);
 
+            app.UseHeadElementServerPrerendering();
+
             // Log
             app.UseElectLog();
 
@@ -144,9 +133,11 @@ namespace Goblin.Core.Web.Setup
             app.UseResponseCompression();
 
             // Static Files
-            app.UseStaticFiles();
 
+            app.UseStaticFiles();
+            
             // Blazor
+            
             app.UseRouting();
             
             app.UseEndpoints(endpoints =>
@@ -154,7 +145,7 @@ namespace Goblin.Core.Web.Setup
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
-
+            
             // Call Back
             AfterConfigureApp?.Invoke(app, env, lifetime);
         }
