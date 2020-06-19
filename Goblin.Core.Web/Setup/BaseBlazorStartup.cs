@@ -110,6 +110,7 @@ namespace Goblin.Core.Web.Setup
             // Call Back
             BeforeConfigureApp?.Invoke(app, env, lifetime);
 
+            // Blazor Metadata Render Middleware (Keep on the top / first Middleware)
             app.UseHeadElementServerPrerendering();
 
             // Log
