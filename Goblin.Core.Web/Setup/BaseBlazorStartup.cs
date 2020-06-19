@@ -55,12 +55,6 @@ namespace Goblin.Core.Web.Setup
             set;
         }
         
-        protected Action<IApplicationBuilder, IWebHostEnvironment, IHostApplicationLifetime> BeforeConfigureAppEndpoint
-        {
-            get;
-            set;
-        }
-
         protected BaseBlazorStartup(IWebHostEnvironment env, IConfiguration configuration)
         {
             WebHostEnvironment = env;
@@ -155,9 +149,6 @@ namespace Goblin.Core.Web.Setup
             // Blazor
             app.UseRouting();
             
-            // Before Config Endpoint
-            BeforeConfigureAppEndpoint?.Invoke(app, env, lifetime);
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBlazorHub();
