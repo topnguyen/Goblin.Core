@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace Goblin.Core.Errors
 {
@@ -23,7 +22,6 @@ namespace Goblin.Core.Errors
         /// </summary>
         public int StatusCode { get; set; }
 
-        [JsonExtensionData]
         public Dictionary<string, object> AdditionalData { get; set; } = new Dictionary<string, object>();
 
         public GoblinErrorModel()

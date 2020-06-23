@@ -16,14 +16,28 @@ namespace Goblin.Core.Errors
         [JsonExtensionData] 
         public Dictionary<string, object> AdditionalData { get; set; } = new Dictionary<string, object>();
 
+        public GoblinErrorModel ErrorModel => ToExceptionModel();
+        
+        private readonly GoblinErrorModel _errorModel;
+        
         public GoblinException(string code, string message = "", int statusCode = StatusCodes.Status400BadRequest):base(message)
         {
             Code = code;
             StatusCode = statusCode;
         }
 
-        public GoblinErrorModel ToExceptionModel()
+        public GoblinException(GoblinErrorModel errorModel)
         {
+            _errorModel = errorModel;
+        }
+
+        private GoblinErrorModel ToExceptionModel()
+        {
+            if (_errorModel != null)
+            {
+                return _errorModel;
+            }
+            
             return new GoblinErrorModel(this);
         }
     }
