@@ -1,6 +1,7 @@
 ﻿using System;
 using Elect.Core.ObjUtils;
 using Elect.Core.XmlUtils;
+using Elect.DI.Attributes;
 using Elect.Logger.Logging;
 using Elect.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Goblin.Core.Web.Filters.Exception
 {
+    [ScopedDependency]
     public class GoblinApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
         private readonly IElectLog _electLog;

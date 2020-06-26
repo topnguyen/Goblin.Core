@@ -2,25 +2,18 @@
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Text.Json;
-using Elect.Core.ConfigUtils;
 using Elect.DI;
 using Elect.Job.Hangfire;
-using Elect.Job.Hangfire.Models;
 using Elect.Logger.Logging;
-using Elect.Logger.Logging.Models;
 using Elect.Mapper.AutoMapper;
 using Elect.Web.HealthCheck;
-using Elect.Web.HealthCheck.Models;
 using Elect.Web.Middlewares.CorsMiddleware;
 using Elect.Web.Middlewares.HttpContextMiddleware;
 using Elect.Web.Middlewares.MeasureProcessingTimeMiddleware;
 using Elect.Web.Middlewares.ServerInfoMiddleware;
 using Elect.Web.Swagger;
-using Elect.Web.Swagger.Models;
 using FluentValidation.AspNetCore;
 using Goblin.Core.Web.Binders;
-using Goblin.Core.Web.Filters.Exception;
-using Goblin.Core.Web.Filters.Validation;
 using Goblin.Core.Web.JsonConverters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -83,8 +76,7 @@ namespace Goblin.Core.Web.Setup
                 builder.SetMinimumLevel(LogLevel.Information);
             });
 
-            var electLogOptions = Configuration.GetSection<ElectLogOptions>("ElectLog");
-            services.AddElectLog(electLogOptions);
+            services.AddElectLog(Configuration);
 
             // Mapper
             services.AddElectAutoMapper();
@@ -96,21 +88,13 @@ namespace Goblin.Core.Web.Setup
             services.AddElectServerInfo();
 
             // API Doc - Swagger
-            var electSwaggerOptions = Configuration.GetSection<ElectSwaggerOptions>("ElectSwagger");
-            services.AddElectSwagger(electSwaggerOptions);
+            services.AddElectSwagger(Configuration);
 
             // Health Check
-            var electHealthCheckOptions = Configuration.GetSection<ElectHealthCheckOptions>("ElectHealthCheck");
-            services.AddElectHealthCheck(electHealthCheckOptions);
+            services.AddElectHealthCheck(Configuration);
 
             // Background Job - Hangfire
-            var electHangfireOptions = Configuration.GetSection<ElectHangfireOptions>("ElectHangfire");
-        
-            var test = Configuration.GetSection<dynamic>("ElectHangfire");
-
-            var testdata = test.HangfireDatabaseConnectionString;
-            
-            services.AddElectHangfire(electHangfireOptions);
+            services.AddElectHangfire(Configuration);
 
             // MVC
 
@@ -133,10 +117,6 @@ namespace Goblin.Core.Web.Setup
             services.AddDateTimeOffsetBinder();
             services.AddDateTimeBinder();
             services.AddTimeSpanBinder();
-
-            // Filters
-            services.AddScoped<GoblinApiValidationActionFilterAttribute>();
-            services.AddScoped<GoblinApiExceptionFilterAttribute>();
 
             // MVC Json Config
             mvcCoreBuilder.AddJsonOptions(options =>
