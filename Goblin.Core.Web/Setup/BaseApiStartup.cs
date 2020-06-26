@@ -105,6 +105,11 @@ namespace Goblin.Core.Web.Setup
 
             // Background Job - Hangfire
             var electHangfireOptions = Configuration.GetSection<ElectHangfireOptions>("ElectHangfire");
+        
+            var test = Configuration.GetSection<dynamic>("ElectHangfire");
+
+            var testdata = test.HangfireDatabaseConnectionString;
+            
             services.AddElectHangfire(electHangfireOptions);
 
             // MVC
