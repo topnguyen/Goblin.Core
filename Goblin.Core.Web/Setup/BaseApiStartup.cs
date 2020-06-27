@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Text.Json;
+using Elect.Core.ConfigUtils;
 using Elect.DI;
 using Elect.Job.Hangfire;
 using Elect.Logger.Logging;
 using Elect.Mapper.AutoMapper;
+using Elect.Web.Consul;
+using Elect.Web.Consul.Models;
 using Elect.Web.HealthCheck;
 using Elect.Web.Middlewares.CorsMiddleware;
 using Elect.Web.Middlewares.HttpContextMiddleware;
@@ -95,6 +98,9 @@ namespace Goblin.Core.Web.Setup
 
             // Background Job - Hangfire
             services.AddElectHangfire(Configuration);
+            
+            // Consul
+            services.AddElectConsul(Configuration);
 
             // MVC
 
