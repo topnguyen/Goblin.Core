@@ -22,8 +22,8 @@
 
         <!-- Elect -->
         <PackageReference Include="Elect.Web.Middlewares" Version="3.1.2" />
-        <PackageReference Include="Elect.Web.HealthCheck" Version="3.1.1" />
-        <PackageReference Include="Elect.Web.Swagger" Version="3.1.2" />
+        <PackageReference Include="Elect.Web.HealthCheck" Version="3.1.2" />
+        <PackageReference Include="Elect.Web.Swagger" Version="3.1.4" />
 
         <!-- Goblin -->
         <ProjectReference Include="..\Goblin.Core\Goblin.Core.csproj" />

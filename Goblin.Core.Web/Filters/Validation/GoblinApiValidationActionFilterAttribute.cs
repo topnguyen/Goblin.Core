@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Elect.Core.XmlUtils;
+using Elect.DI.Attributes;
 using Elect.Web.Models;
 using Goblin.Core.Errors;
 using Goblin.Core.Settings;
@@ -12,6 +13,7 @@ using Newtonsoft.Json;
 
 namespace Goblin.Core.Web.Filters.Validation
 {
+    [ScopedDependency]
     public class GoblinApiValidationActionFilterAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)

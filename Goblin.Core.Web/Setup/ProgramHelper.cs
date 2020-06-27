@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Elect.Core.Constants;
 using Elect.Core.EnvUtils;
 using Microsoft.AspNetCore.HostFiltering;
 using Microsoft.AspNetCore.Hosting;
@@ -96,7 +95,7 @@ namespace Goblin.Core.Web.Setup
 
                 configBuilder.SetBasePath(Directory.GetCurrentDirectory());
 
-                configBuilder.AddJsonFile(ConfigurationFileName.AppSettings, true, true);
+                configBuilder.AddJsonFile("appsettings.json", true, true);
 
                 var env = context.HostingEnvironment;
 
