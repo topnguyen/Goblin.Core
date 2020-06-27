@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.Text.Json;
 using Elect.Core.ConfigUtils;
 using Elect.DI;
+using Elect.Jaeger;
 using Elect.Job.Hangfire;
 using Elect.Logger.Logging;
 using Elect.Mapper.AutoMapper;
@@ -101,6 +102,9 @@ namespace Goblin.Core.Web.Setup
             
             // Consul
             services.AddElectConsul(Configuration);
+            
+            // Jaeger
+            services.AddElectJaeger(Configuration);
 
             // MVC
 
