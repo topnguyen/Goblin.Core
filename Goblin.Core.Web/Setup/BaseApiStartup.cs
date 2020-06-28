@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Text.Json;
-using Elect.Core.ConfigUtils;
 using Elect.DI;
 using Elect.Jaeger;
 using Elect.Job.Hangfire;
 using Elect.Logger.Logging;
 using Elect.Mapper.AutoMapper;
 using Elect.Web.Consul;
-using Elect.Web.Consul.Models;
 using Elect.Web.HealthCheck;
 using Elect.Web.Middlewares.CorsMiddleware;
 using Elect.Web.Middlewares.HttpContextMiddleware;
@@ -80,7 +78,8 @@ namespace Goblin.Core.Web.Setup
                 builder.SetMinimumLevel(LogLevel.Information);
             });
 
-            services.AddElectLog(Configuration);
+            var electLogOptions = Elect.Logger.Logging.IServiceCollectionExtensions.GetOptions(Configuration);
+            services.AddElectLog(electLogOptions);
 
             // Mapper
             services.AddElectAutoMapper();
@@ -92,19 +91,24 @@ namespace Goblin.Core.Web.Setup
             services.AddElectServerInfo();
 
             // API Doc - Swagger
-            services.AddElectSwagger(Configuration);
+            var electSwaggerOptions = Elect.Web.Swagger.IServiceCollectionExtensions.GetOptions(Configuration);
+            services.AddElectSwagger(electSwaggerOptions);
 
             // Health Check
-            services.AddElectHealthCheck(Configuration);
+            var electHealthCheckOptions = Elect.Web.HealthCheck.IServiceCollectionExtensions.GetOptions(Configuration);
+            services.AddElectHealthCheck(electHealthCheckOptions);
 
             // Background Job - Hangfire
-            services.AddElectHangfire(Configuration);
+            var electHangfireOptions = Elect.Job.Hangfire.IServiceCollectionExtensions.GetOptions(Configuration);
+            services.AddElectHangfire(electHangfireOptions);
             
             // Consul
-            services.AddElectConsul(Configuration);
+            var electConsulOptions = Elect.Web.Consul.IServiceCollectionExtensions.GetOptions(Configuration);
+            services.AddElectConsul(electConsulOptions);
             
             // Jaeger
-            services.AddElectJaeger(Configuration);
+            var electJaegerOptions = Elect.Jaeger.IServiceCollectionExtensions.GetOptions(Configuration);
+            services.AddElectJaeger(electJaegerOptions);
 
             // MVC
 

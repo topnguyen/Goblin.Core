@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO.Compression;
-using Elect.Core.ConfigUtils;
 using Elect.DI;
 using Elect.Logger.Logging;
-using Elect.Logger.Logging.Models;
 using Elect.Mapper.AutoMapper;
 using Elect.Web.Middlewares.HttpContextMiddleware;
 using Elect.Web.Middlewares.MeasureProcessingTimeMiddleware;
@@ -60,7 +58,7 @@ namespace Goblin.Core.Web.Setup
                 builder.SetMinimumLevel(LogLevel.Information);
             });
 
-            var electLogOptions = Configuration.GetSection<ElectLogOptions>("ElectLog");
+            var electLogOptions = Elect.Logger.Logging.IServiceCollectionExtensions.GetOptions(Configuration);
             services.AddElectLog(electLogOptions);
 
             // Mapper
