@@ -5,7 +5,6 @@ using System.Text.Json;
 using Elect.DI;
 using Elect.Jaeger;
 using Elect.Job.Hangfire;
-using Elect.Logger.Logging;
 using Elect.Mapper.AutoMapper;
 using Elect.Web.Consul;
 using Elect.Web.HealthCheck;
@@ -77,9 +76,6 @@ namespace Goblin.Core.Web.Setup
                 builder.AddConsole();
                 builder.SetMinimumLevel(LogLevel.Information);
             });
-
-            var electLogOptions = Elect.Logger.Logging.IServiceCollectionExtensions.GetOptions(Configuration);
-            services.AddElectLog(electLogOptions);
 
             // Mapper
             services.AddElectAutoMapper();
@@ -191,9 +187,6 @@ namespace Goblin.Core.Web.Setup
         {
             // Call Back
             BeforeConfigureApp?.Invoke(app, env, lifetime);
-
-            // Log
-            app.UseElectLog();
 
             if (env.IsDevelopment())
             {

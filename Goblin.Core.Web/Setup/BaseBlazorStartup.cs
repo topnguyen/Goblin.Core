@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO.Compression;
 using Elect.DI;
-using Elect.Logger.Logging;
 using Elect.Mapper.AutoMapper;
 using Elect.Web.Middlewares.HttpContextMiddleware;
 using Elect.Web.Middlewares.MeasureProcessingTimeMiddleware;
@@ -58,9 +57,6 @@ namespace Goblin.Core.Web.Setup
                 builder.SetMinimumLevel(LogLevel.Information);
             });
 
-            var electLogOptions = Elect.Logger.Logging.IServiceCollectionExtensions.GetOptions(Configuration);
-            services.AddElectLog(electLogOptions);
-
             // Mapper
             services.AddElectAutoMapper();
 
@@ -110,9 +106,6 @@ namespace Goblin.Core.Web.Setup
 
             // Blazor Metadata Render Middleware (Keep on the top / first Middleware)
             app.UseHeadElementServerPrerendering();
-
-            // Log
-            app.UseElectLog();
 
             if (env.IsDevelopment())
             {

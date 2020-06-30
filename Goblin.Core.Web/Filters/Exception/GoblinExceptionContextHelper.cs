@@ -1,7 +1,5 @@
 ﻿using System;
 using Elect.Core.EnvUtils;
-using Elect.Logger.Logging;
-using Elect.Logger.Models.Logging;
 using Goblin.Core.Errors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -10,7 +8,7 @@ namespace Goblin.Core.Web.Filters.Exception
 {
     public static class GoblinExceptionContextHelper
     {
-        public static GoblinErrorModel GetErrorModel(ExceptionContext context, IElectLog electLog)
+        public static GoblinErrorModel GetErrorModel(ExceptionContext context)
         {
             GoblinErrorModel errorModel;
 
@@ -39,8 +37,6 @@ namespace Goblin.Core.Web.Filters.Exception
                     break;
                 }
             }
-
-            electLog.Capture(context.Exception, LogType.Error, context.HttpContext);
 
             if (EnvHelper.IsDevelopment())
             {

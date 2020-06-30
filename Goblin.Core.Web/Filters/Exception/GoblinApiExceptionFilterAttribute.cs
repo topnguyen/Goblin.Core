@@ -2,7 +2,6 @@
 using Elect.Core.ObjUtils;
 using Elect.Core.XmlUtils;
 using Elect.DI.Attributes;
-using Elect.Logger.Logging;
 using Elect.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -12,13 +11,6 @@ namespace Goblin.Core.Web.Filters.Exception
     [ScopedDependency]
     public class GoblinApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
-        private readonly IElectLog _electLog;
-
-        public GoblinApiExceptionFilterAttribute(IElectLog electLog)
-        {
-            _electLog = electLog;
-        }
-
         public override void OnException(ExceptionContext context)
         {
             // Ignore cancel action
@@ -29,7 +21,7 @@ namespace Goblin.Core.Web.Filters.Exception
                 return;
             }
 
-            var errorModel = GoblinExceptionContextHelper.GetErrorModel(context, _electLog);
+            var errorModel = GoblinExceptionContextHelper.GetErrorModel(context);
 
             // Response Result
 
