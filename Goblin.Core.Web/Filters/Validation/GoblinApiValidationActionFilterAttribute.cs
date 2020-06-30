@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,6 +10,7 @@ using Goblin.Core.Errors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using OpenTracing;
@@ -19,13 +21,11 @@ namespace Goblin.Core.Web.Filters.Validation
     [ScopedDependency]
     public class GoblinApiValidationActionFilterAttribute : ActionFilterAttribute
     {
-        private readonly ITracer _jaegerTracer;
-        private readonly ElectJaegerOptions _electJeagerOptions;
+        private readonly IServiceProvider _services;
 
-        public GoblinApiValidationActionFilterAttribute(ITracer jaegerTracer, IOptions<ElectJaegerOptions> electJeagerOptions)
+        public GoblinApiValidationActionFilterAttribute(IServiceProvider services)
         {
-            _jaegerTracer = jaegerTracer;
-            _electJeagerOptions = electJeagerOptions.Value;
+            _services = services;
         }
         
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -43,8 +43,19 @@ namespace Goblin.Core.Web.Filters.Validation
             
             // Log to Jaeger
             
-            LogToJaeger(errorModel, _jaegerTracer);
+            // --- Lazy Resolve for boost performance ---
+            
+            var electJeagerOptions = _services.GetRequiredService<IOptions<ElectJaegerOptions>>().Value;
+            
+            if (electJeagerOptions.IsEnable)
+            {
+                // --- Lazy resolve service for case IsEnable false then Inject will raise resolve issue ---
 
+                var jaegerTracer = _services.GetRequiredService<ITracer>();
+            
+                LogToJaeger(errorModel, jaegerTracer);
+            }
+            
             // Response Result
 
             context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
@@ -83,11 +94,6 @@ namespace Goblin.Core.Web.Filters.Validation
         
         private void LogToJaeger(GoblinErrorModel errorModel, ITracer jaegerTracer)
         {
-            if (!_electJeagerOptions.IsEnable)
-            {
-                return;
-            }
-            
             var operationName = "👀 INVALID DATA 🤣";
 
             var builder = jaegerTracer.BuildSpan(operationName);

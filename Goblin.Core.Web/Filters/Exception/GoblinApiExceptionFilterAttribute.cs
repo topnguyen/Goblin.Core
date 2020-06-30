@@ -10,6 +10,7 @@ using Goblin.Core.Errors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using OpenTracing;
@@ -20,13 +21,11 @@ namespace Goblin.Core.Web.Filters.Exception
     [ScopedDependency]
     public class GoblinApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
-        private readonly ITracer _jaegerTracer;
-        private readonly ElectJaegerOptions _electJeagerOptions;
+        private readonly IServiceProvider _services;
 
-        public GoblinApiExceptionFilterAttribute(ITracer jaegerTracer, IOptions<ElectJaegerOptions> electJeagerOptions)
+        public GoblinApiExceptionFilterAttribute(IServiceProvider services)
         {
-            _jaegerTracer = jaegerTracer;
-            _electJeagerOptions = electJeagerOptions.Value;
+            _services = services;
         }
 
         public override void OnException(ExceptionContext context)
@@ -42,8 +41,19 @@ namespace Goblin.Core.Web.Filters.Exception
             var errorModel = GetErrorModel(context);
 
             // Log to Jaeger
+
+            // --- Lazy Resolve for boost performance ---
             
-            LogToJaeger(context, errorModel, _jaegerTracer);
+            var electJeagerOptions = _services.GetRequiredService<IOptions<ElectJaegerOptions>>().Value;
+            
+            if (electJeagerOptions.IsEnable)
+            {
+                // --- Lazy resolve service for case IsEnable false then Inject will raise resolve issue ---
+
+                var jaegerTracer = _services.GetRequiredService<ITracer>();
+            
+                LogToJaeger(context, errorModel, jaegerTracer);
+            }
 
             // Response Result
 
@@ -132,11 +142,6 @@ namespace Goblin.Core.Web.Filters.Exception
 
         private void LogToJaeger(ExceptionContext exceptionContext, GoblinErrorModel errorModel, ITracer jaegerTracer)
         {
-            if (!_electJeagerOptions.IsEnable)
-            {
-                return;
-            }
-            
             var operationName = "💩😭💩 EXCEPTION 🔥🐛🔥";
 
             var builder = jaegerTracer.BuildSpan(operationName);
