@@ -4,11 +4,13 @@ using System.Text.Json;
 using Elect.Core.EnvUtils;
 using Elect.Core.XmlUtils;
 using Elect.DI.Attributes;
+using Elect.Jaeger.Models;
 using Elect.Web.Models;
 using Goblin.Core.Errors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using OpenTracing;
 using ContentType = Elect.Web.Models.ContentType;
@@ -19,10 +21,12 @@ namespace Goblin.Core.Web.Filters.Exception
     public class GoblinApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
         private readonly ITracer _jaegerTracer;
+        private readonly ElectJaegerOptions _electJeagerOptions;
 
-        public GoblinApiExceptionFilterAttribute(ITracer jaegerTracer)
+        public GoblinApiExceptionFilterAttribute(ITracer jaegerTracer, IOptions<ElectJaegerOptions> electJeagerOptions)
         {
             _jaegerTracer = jaegerTracer;
+            _electJeagerOptions = electJeagerOptions.Value;
         }
 
         public override void OnException(ExceptionContext context)
@@ -74,7 +78,7 @@ namespace Goblin.Core.Web.Filters.Exception
             base.OnException(context);
         }
 
-        private static GoblinErrorModel GetErrorModel(ExceptionContext exceptionContext)
+        private GoblinErrorModel GetErrorModel(ExceptionContext exceptionContext)
         {
             GoblinErrorModel errorModel;
 
@@ -126,8 +130,13 @@ namespace Goblin.Core.Web.Filters.Exception
             return errorModel;
         }
 
-        private static void LogToJaeger(ExceptionContext exceptionContext, GoblinErrorModel errorModel, ITracer jaegerTracer)
+        private void LogToJaeger(ExceptionContext exceptionContext, GoblinErrorModel errorModel, ITracer jaegerTracer)
         {
+            if (!_electJeagerOptions.IsEnable)
+            {
+                return;
+            }
+            
             var operationName = "💩😭💩 EXCEPTION 🔥🐛🔥";
 
             var builder = jaegerTracer.BuildSpan(operationName);

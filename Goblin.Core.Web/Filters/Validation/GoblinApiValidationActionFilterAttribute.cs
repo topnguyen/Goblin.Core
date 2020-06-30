@@ -3,11 +3,13 @@ using System.Linq;
 using System.Net;
 using Elect.Core.XmlUtils;
 using Elect.DI.Attributes;
+using Elect.Jaeger.Models;
 using Elect.Web.Models;
 using Goblin.Core.Errors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using OpenTracing;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -18,10 +20,12 @@ namespace Goblin.Core.Web.Filters.Validation
     public class GoblinApiValidationActionFilterAttribute : ActionFilterAttribute
     {
         private readonly ITracer _jaegerTracer;
+        private readonly ElectJaegerOptions _electJeagerOptions;
 
-        public GoblinApiValidationActionFilterAttribute(ITracer jaegerTracer)
+        public GoblinApiValidationActionFilterAttribute(ITracer jaegerTracer, IOptions<ElectJaegerOptions> electJeagerOptions)
         {
             _jaegerTracer = jaegerTracer;
+            _electJeagerOptions = electJeagerOptions.Value;
         }
         
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -63,7 +67,7 @@ namespace Goblin.Core.Web.Filters.Validation
             }
         }
 
-        private static Dictionary<string, object> GetModelStateInvalidInfo(ActionContext context)
+        private Dictionary<string, object> GetModelStateInvalidInfo(ActionContext context)
         {
             var keyValueInvalidDictionary = new Dictionary<string, object>();
 
@@ -77,8 +81,13 @@ namespace Goblin.Core.Web.Filters.Validation
             return keyValueInvalidDictionary;
         }
         
-        private static void LogToJaeger(GoblinErrorModel errorModel, ITracer jaegerTracer)
+        private void LogToJaeger(GoblinErrorModel errorModel, ITracer jaegerTracer)
         {
+            if (!_electJeagerOptions.IsEnable)
+            {
+                return;
+            }
+            
             var operationName = "👀 INVALID DATA 🤣";
 
             var builder = jaegerTracer.BuildSpan(operationName);
