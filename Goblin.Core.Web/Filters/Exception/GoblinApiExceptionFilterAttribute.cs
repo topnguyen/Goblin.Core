@@ -9,7 +9,9 @@ using Goblin.Core.Errors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.PlatformAbstractions;
 using OpenTracing;
+using ContentType = Elect.Web.Models.ContentType;
 
 namespace Goblin.Core.Web.Filters.Exception
 {
@@ -136,10 +138,12 @@ namespace Goblin.Core.Web.Filters.Exception
 
             if (errorModel != null)
             {
-                jaegerTracer.ActiveSpan.SetTag("Exception Id", errorModel.Id);
-                jaegerTracer.ActiveSpan.SetTag("Exception Code", errorModel.Code);
-                jaegerTracer.ActiveSpan.SetTag("Exception Message", errorModel.Message);
-                jaegerTracer.ActiveSpan.SetTag("Exception Status Code", errorModel.StatusCode);
+                jaegerTracer.ActiveSpan.SetTag("goblin.app_name", PlatformServices.Default.Application.ApplicationName);
+                jaegerTracer.ActiveSpan.SetTag("goblin.log_type", "exception");
+                jaegerTracer.ActiveSpan.SetTag("goblin.exception.id", errorModel.Id);
+                jaegerTracer.ActiveSpan.SetTag("goblin.exception.code", errorModel.Code);
+                jaegerTracer.ActiveSpan.SetTag("goblin.exception.message", errorModel.Message);
+                jaegerTracer.ActiveSpan.SetTag("goblin.exception.status_code", errorModel.StatusCode);
 
                 if (errorModel.AdditionalData?.Any() == true)
                 {
