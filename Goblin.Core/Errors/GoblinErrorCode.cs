@@ -1,6 +1,6 @@
 namespace Goblin.Core.Errors
 {
-    public class GoblinErrorCode
+    public abstract class GoblinErrorCode
     {
         public const string BadRequest = "Bad Request";
         public const string UnAuthenticated = "Un-Authenticate";
