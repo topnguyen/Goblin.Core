@@ -5,6 +5,6 @@ namespace Goblin.Core.Models
         /// <summary>
         ///     UserId Key
         /// </summary>
-        public long LoggedInUserId { get; set; }
+        public long? LoggedInUserId { get; set; }
     }
 }
