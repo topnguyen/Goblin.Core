@@ -1,6 +1,6 @@
 namespace Goblin.Core.Models
 {
-    public class GoblinApiRequestModel
+    public abstract class GoblinApiSubmitRequestModel
     {
         /// <summary>
         ///     UserId Key
