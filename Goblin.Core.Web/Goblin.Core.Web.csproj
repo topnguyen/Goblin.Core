@@ -30,4 +30,8 @@
         <!-- Goblin -->
         <ProjectReference Include="..\Goblin.Core\Goblin.Core.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Models" />
+    </ItemGroup>
 </Project>

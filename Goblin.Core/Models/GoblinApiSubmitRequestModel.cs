@@ -1,6 +1,8 @@
+using Elect.Core.ObjUtils;
+
 namespace Goblin.Core.Models
 {
-    public abstract class GoblinApiSubmitRequestModel
+    public abstract class GoblinApiSubmitRequestModel : ElectDisposableModel
     {
         /// <summary>
         ///     UserId Key

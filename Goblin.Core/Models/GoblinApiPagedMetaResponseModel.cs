@@ -1,40 +1,38 @@
+using System;
 using Elect.Core.ObjUtils;
+using Elect.Web.Api.Models;
 using Elect.Web.IUrlHelperUtils;
 using Elect.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Newtonsoft.Json;
-using System;
-using Elect.Web.Api.Models;
-using Goblin.Core.Models;
 
-namespace Goblin.Core.Web.Models
+namespace Goblin.Core.Models
 {
     public sealed class GoblinApiPagedMetaResponseModel<TRequest, TResponse> : GoblinApiPagedResponseModel<TResponse> where TResponse : class, new() where TRequest : GoblinApiPagedRequestModel
     {
         private readonly TRequest _pagedRequestModel;
 
-        private readonly PagedResponseModel<TResponse> _pagedResponseModel;
+        private readonly GoblinApiPagedResponseModel<TResponse> _pagedResponseModel;
 
         private readonly HttpMethod _method;
 
         private readonly string _endpoint;
 
-        [JsonProperty(Order = 1)] public LinkModel Meta { get; set; }
+        public LinkModel Meta { get; set; }
 
-        [JsonProperty(Order = 2)] public LinkModel First { get; set; }
+        public LinkModel First { get; set; }
 
-        [JsonProperty(Order = 3)] public LinkModel Previous { get; set; }
+        public LinkModel Previous { get; set; }
 
-        [JsonProperty(Order = 4)] public LinkModel Next { get; set; }
+        public LinkModel Next { get; set; }
 
-        [JsonProperty(Order = 5)] public LinkModel Last { get; set; }
+        public LinkModel Last { get; set; }
 
         public GoblinApiPagedMetaResponseModel()
         {
         }
 
-        public GoblinApiPagedMetaResponseModel(PagedResponseModel<TResponse> pagedResponseModel) : this()
+        public GoblinApiPagedMetaResponseModel(GoblinApiPagedResponseModel<TResponse> pagedResponseModel) : this()
         {
             _pagedResponseModel = pagedResponseModel;
 
@@ -45,7 +43,7 @@ namespace Goblin.Core.Web.Models
             AdditionalData = pagedResponseModel.AdditionalData;
         }
 
-        public GoblinApiPagedMetaResponseModel(IUrlHelper urlHelper, TRequest pagedRequestModel, PagedResponseModel<TResponse> pagedResponseModel, HttpMethod method = HttpMethod.GET) : this(pagedResponseModel)
+        public GoblinApiPagedMetaResponseModel(IUrlHelper urlHelper, TRequest pagedRequestModel, GoblinApiPagedResponseModel<TResponse> pagedResponseModel, HttpMethod method = HttpMethod.GET) : this(pagedResponseModel)
         {
             _pagedRequestModel = pagedRequestModel;
 
