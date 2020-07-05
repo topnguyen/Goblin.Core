@@ -17,7 +17,7 @@
 
     <ItemGroup>
         <!-- Elect -->
-        <PackageReference Include="Elect.Core" Version="3.1.2.2" />
+        <PackageReference Include="Elect.Core" Version="3.1.2.3" />
         <PackageReference Include="Elect.DI" Version="3.1.1" />
         <PackageReference Include="Elect.Mapper.AutoMapper" Version="3.1.1" />
         <PackageReference Include="Elect.Data.IO" Version="3.1.3" />
