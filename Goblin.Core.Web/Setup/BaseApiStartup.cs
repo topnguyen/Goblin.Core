@@ -36,22 +36,18 @@ namespace Goblin.Core.Web.Setup
         protected Action<IServiceCollection> BeforeConfigureServices { get; set; }
 
         protected Action<IServiceCollection> AfterConfigureServices { get; set; }
+        
+        protected Action<IApplicationBuilder, IWebHostEnvironment, IHostApplicationLifetime> BeforeConfigureApp { get; set; }
+
+        protected Action<IApplicationBuilder, IWebHostEnvironment, IHostApplicationLifetime> BeforeUseMvc { get; set; }
 
         protected Action<IMvcCoreBuilder> BeforeConfigureMvc { get; set; }
 
         protected Action<IMvcCoreBuilder> AfterConfigureMvc { get; set; }
-
-        protected Action<IApplicationBuilder, IWebHostEnvironment, IHostApplicationLifetime> BeforeConfigureApp
-        {
-            get;
-            set;
-        }
-
-        protected Action<IApplicationBuilder, IWebHostEnvironment, IHostApplicationLifetime> AfterConfigureApp
-        {
-            get;
-            set;
-        }
+        
+        protected Action<IApplicationBuilder, IWebHostEnvironment, IHostApplicationLifetime> AfterUseMvc { get; set; }
+  
+        protected Action<IApplicationBuilder, IWebHostEnvironment, IHostApplicationLifetime> AfterConfigureApp { get; set; }
 
         /// <summary>
         ///     Config for Fluent Validation - Register Validators From Assembly Containing Types
@@ -151,7 +147,7 @@ namespace Goblin.Core.Web.Setup
 
             // Callback
             AfterConfigureMvc?.Invoke(mvcCoreBuilder);
-
+            
             // Cors
             services.AddElectCors();
 
@@ -182,8 +178,7 @@ namespace Goblin.Core.Web.Setup
             AfterConfigureServices?.Invoke(services);
         }
 
-        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env,
-            IHostApplicationLifetime lifetime)
+        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
             // Call Back
             BeforeConfigureApp?.Invoke(app, env, lifetime);
@@ -221,7 +216,11 @@ namespace Goblin.Core.Web.Setup
             app.UseStaticFiles();
 
             // MVC
+            BeforeUseMvc?.Invoke(app, env, lifetime);
+
             app.UseMvcWithDefaultRoute();
+            
+            AfterUseMvc?.Invoke(app, env, lifetime);
 
             // Call Back
             AfterConfigureApp?.Invoke(app, env, lifetime);
