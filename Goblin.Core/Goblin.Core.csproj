@@ -7,7 +7,7 @@
 
         <!-- Language and Framework -->
         <LangVersion>latest</LangVersion>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
 
         <!-- Output -->
         <OutputPath>.\bin\</OutputPath>
@@ -25,6 +25,6 @@
         <PackageReference Include="Elect.Web" Version="3.1.1" />
 
         <!-- Validation -->
-        <PackageReference Include="FluentValidation.AspNetCore" Version="8.6.2" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="9.0.0" />
     </ItemGroup>
 </Project>
