@@ -18,7 +18,7 @@ namespace Goblin.Core.Web.Setup
                 {
                     options.HtmlHelperOptions.ClientValidationEnabled = true;
                 });
-                
+
                 mvcCoreBuilder.AddRazorViewEngine();
                 
                 mvcCoreBuilder.AddCacheTagHelper();
